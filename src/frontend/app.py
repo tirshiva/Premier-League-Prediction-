@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-import mlflow
-import mlflow.sklearn
+import joblib # Added for loading the model
 import logging
 from pathlib import Path
 import sys # Add sys import
@@ -154,13 +153,14 @@ def load_predictor_and_data():
         team_stats_path = base_path / "data" / "processed" / "team_stats.csv"
         scaler_mean_path = base_path / "models" / "scaler_mean.npy"
         scaler_scale_path = base_path / "models" / "scaler_scale.npy"
+        model_path = base_path / "models" / "model.pkl" # Path to your bundled model
 
         # Load team statistics
         team_stats_df = pd.read_csv(team_stats_path)
-        
+
         # Initialize and load model
         predictor = MatchPredictor()
-        
+
         # Load scaler parameters
         if scaler_mean_path.exists() and scaler_scale_path.exists():
             predictor.scaler.mean_ = np.load(scaler_mean_path)
@@ -169,32 +169,17 @@ def load_predictor_and_data():
             st.error("Scaler files not found. Please ensure 'scaler_mean.npy' and 'scaler_scale.npy' are in the 'models' directory.")
             return None, None
 
-        # Load the model from the latest MLflow run
-        # Ensure MLFLOW_TRACKING_URI is set if not using local ./mlruns
-        # For Streamlit Cloud, you might need to package the model differently or use a remote tracking server.
-        # For simplicity here, we assume ./mlruns is available.
-        mlflow_tracking_uri = (base_path / "mlruns").as_uri() # Corrected indentation
-        mlflow.set_tracking_uri(mlflow_tracking_uri) # Corrected indentation
-        
-        runs = mlflow.search_runs(experiment_ids=["0"], order_by=["start_time DESC"]) # Assuming experiment ID is "0" # Corrected indentation
-        if not runs.empty: # Corrected indentation
-            latest_run_id = runs.iloc[0].run_id # Corrected indentation
-            model_uri = f"runs:/{latest_run_id}/model" # Corrected indentation
-            try: # Corrected indentation
-                predictor.model = mlflow.sklearn.load_model(model_uri) # Corrected indentation
-                logger.info(f"Model loaded successfully from run ID: {latest_run_id}") # Corrected indentation
-            except Exception as e: # Corrected indentation
-                st.error(f"Error loading MLflow model from {model_uri}: {str(e)}") # Corrected indentation
-                logger.error(f"Error loading MLflow model: {str(e)}") # Corrected indentation
-                return None, None # Corrected indentation
-        else: # Corrected indentation
-            st.error("No MLflow runs found. Cannot load model.") # Corrected indentation
-            logger.error("No MLflow runs found.") # Corrected indentation
-            return None, None # Corrected indentation
-            
-        logger.info("Predictor and team stats loaded successfully") # Corrected indentation
-        return predictor, team_stats_df # Corrected indentation
-        
+        # Load the bundled model
+        if model_path.exists():
+            predictor.model = joblib.load(model_path)
+            logger.info(f"Model loaded successfully from {model_path}")
+        else:
+            st.error(f"Model file not found at {model_path}. Please ensure 'model.pkl' is in the 'models' directory.")
+            logger.error(f"Model file not found at {model_path}")
+            return None, None
+
+        logger.info("Predictor and team stats loaded successfully")
+        return predictor, team_stats_df
     except Exception as e:
         st.error(f"Error loading model or data: {str(e)}")
         logger.error(f"Error loading model or data: {str(e)}")
