@@ -1,0 +1,11 @@
+streamlit~=1.36.0
+pandas==2.2.3
+plotly==5.18.0
+scikit-learn==1.6.1
+requests==2.31.0
+python-dotenv==1.0.0
+numpy==2.2.6
+mlflow==2.22.0
+uvicorn
+scipy==1.15.3
+cloudpickle==3.1.1
