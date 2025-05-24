@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import logging
 from typing import List
+from pathlib import Path # Add Path import
 from src.models.train_model import MatchPredictor
 
 # Configure logging
@@ -34,18 +35,27 @@ async def load_model():
     """Load the trained model and team statistics"""
     global model, team_stats
     try:
+        # Define base_path to locate mlruns relative to this file
+        base_path = Path(__file__).resolve().parent.parent.parent # Project root
+        mlflow_tracking_uri = (base_path / "mlruns").as_uri()
+        mlflow.set_tracking_uri(mlflow_tracking_uri)
+        logger.info(f"Backend MLflow tracking URI set to: {mlflow_tracking_uri}")
+
         # Load team statistics
-        team_stats = pd.read_csv('data/processed/team_stats.csv')
+        team_stats_path = base_path / "data" / "processed" / "team_stats.csv"
+        team_stats = pd.read_csv(team_stats_path)
         
         # Initialize and load model
         model = MatchPredictor()
         
         # Load scaler parameters
-        model.scaler.mean_ = np.load('models/scaler_mean.npy')
-        model.scaler.scale_ = np.load('models/scaler_scale.npy')
+        scaler_mean_path = base_path / "models" / "scaler_mean.npy"
+        scaler_scale_path = base_path / "models" / "scaler_scale.npy"
+        model.scaler.mean_ = np.load(scaler_mean_path)
+        model.scaler.scale_ = np.load(scaler_scale_path)
         
         # Load the model from the latest training
-        runs = mlflow.search_runs(order_by=["start_time DESC"])
+        runs = mlflow.search_runs(experiment_ids=["0"], order_by=["start_time DESC"]) # Assuming experiment ID 0
         if len(runs) > 0:
             latest_run_id = runs.iloc[0].run_id
             model.model = mlflow.sklearn.load_model(f"runs:/{latest_run_id}/model")

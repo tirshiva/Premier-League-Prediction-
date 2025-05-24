@@ -1,1 +1,45 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv
+venv
+env
+ENV
+
+# Secrets
+secrets.toml
+.env
+
+# IDE specific (optional, but common)
+# .vscode/
+# .idea/
+
+# Log files
+*.log
+
+# User specific (retaining from original)
 project_presentation_script.txt
+
+# Note on MLflow, data, and models for deployment:
+# The Streamlit application (src/frontend/app.py) currently loads:
+# - The MLmodel from the 'mlruns' directory.
+# - 'data/processed/team_stats.csv'.
+# - 'models/scaler_mean.npy' and 'models/scaler_scale.npy'.
+#
+# Ensure these files and the 'mlruns' directory (or at least the specific
+# MLflow run artifacts required by the application) are tracked by Git and
+# included in your deployment package.
+# If 'mlruns' becomes very large, consider a strategy to package
+# only the necessary model artifacts (e.g., copy the specific model.pkl
+# and related files to the 'models/' directory and adjust loading logic).
+#
+# The following should NOT be ignored if they are essential for the app:
+# !data/processed/team_stats.csv
+# !models/scaler_mean.npy
+# !models/scaler_scale.npy
+# mlruns/  <- Crucial for current app logic. Do not ignore unless model loading is changed.
