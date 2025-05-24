@@ -1,99 +1,40 @@
-# Champions League Score Prediction MLOps Project
+# Premier League Match Predictor
 
-This project implements a machine learning pipeline for predicting scores in Champions League matches using historical data from 1955-2023.
-
-## Project Structure
-```
-├── data/
-│   ├── raw/         # Raw data downloaded from Kaggle
-│   └── processed/   # Processed data for training
-├── src/
-│   ├── api/         # FastAPI service
-│   ├── data/        # Data ingestion and preprocessing
-│   ├── models/      # Model training and evaluation
-│   └── main.py      # Main pipeline orchestration
-├── requirements.txt # Project dependencies
-└── README.md
-```
-
-## Setup
-
-1. Create and activate virtual environment:
-```bash
-python -m venv venv
-source venv/Scripts/activate  # Windows
-```
-
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-## Usage
-
-### Running the Pipeline
-
-To run the complete ML pipeline (data ingestion, preprocessing, training, and evaluation):
-
-```bash
-python src/main.py
-```
-
-### Starting the API Service
-
-To start the prediction API:
-
-```bash
-uvicorn src.api.main:app --reload
-```
-
-### API Endpoints
-
-- `POST /predict`: Make predictions
-  - Input: JSON with features array
-  - Returns: Predicted score
-
-- `GET /health`: Health check endpoint
-
-### MLflow Tracking
-
-The project uses MLflow to track experiments. To view the MLflow UI:
-
-```bash
-mlflow ui
-```
-
-Then visit `http://localhost:5000`
+## Overview
+This project is a web application that uses machine learning to predict the outcome of Premier League matches. The application allows users to select two teams and view detailed statistics and predictions for the match.
 
 ## Features
+- **Match Prediction**: Uses a trained machine learning model to predict match outcomes based on selected teams.
+- **Team Statistics**: Displays team stats including:
+  - Matches played
+  - Total points
+  - Goals scored & conceded
+  - Goal difference
+  - Win rate
+  - Points per game
+- **User Interface**: Built with **Streamlit**, making it easy to select teams and view predictions.
 
-- Data ingestion from Kaggle API
-- Automated data preprocessing pipeline
-- Model training with MLflow experiment tracking
-- Model serving via FastAPI
-- Logging and error handling
-- Scalable project structure
+## Technical Details
+- **Backend**: Built using **FastAPI** to provide a RESTful API.
+- **Machine Learning**: 
+  - Trained model (`MatchPredictor`) built using `scikit-learn`
+  - Trained and managed with `mlflow`
+- **Data Source**: Historical Premier League data fetched using the **Kaggle API**
+- **Logging**: Integrated for debugging and error tracking
 
-## Model Details
+## Requirements
+- Python 3.8+
+- FastAPI
+- mlflow
+- scikit-learn
+- pandas
+- numpy
+- Streamlit
+- Kaggle API
 
-The current implementation uses Linear Regression to predict match scores based on historical data. Features include:
-- Year of the match
-- (Additional features can be added in the data preprocessing step)
+## Installation
 
-## Future Improvements
-
-1. Add more sophisticated models (e.g., XGBoost, LightGBM)
-2. Implement feature importance analysis
-3. Add CI/CD pipeline
-4. Add model versioning
-5. Implement A/B testing
-6. Add data validation
-7. Implement model monitoring
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/premier-league-match-predictor.git
+   cd premier-league-match-predictor
