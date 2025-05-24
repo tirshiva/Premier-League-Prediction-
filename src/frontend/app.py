@@ -7,6 +7,8 @@ import joblib # Added for loading the model
 import logging
 from pathlib import Path
 import sys # Add sys import
+import mlflow
+import mlflow.sklearn
 
 # Adjust import path by adding project root to sys.path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -154,6 +156,7 @@ def load_predictor_and_data():
         scaler_mean_path = base_path / "models" / "scaler_mean.npy"
         scaler_scale_path = base_path / "models" / "scaler_scale.npy"
         model_path = base_path / "models" / "model.pkl" # Path to your bundled model
+        mlflow_model_uri =  "mlruns/0/bf93e9b98b0843fcbbbb999586a56072/artifacts/model"  # Path to the MLflow model
 
         # Load team statistics
         team_stats_df = pd.read_csv(team_stats_path)
@@ -169,13 +172,13 @@ def load_predictor_and_data():
             st.error("Scaler files not found. Please ensure 'scaler_mean.npy' and 'scaler_scale.npy' are in the 'models' directory.")
             return None, None
 
-        # Load the bundled model
-        if model_path.exists():
-            predictor.model = joblib.load(model_path)
-            logger.info(f"Model loaded successfully from {model_path}")
-        else:
-            st.error(f"Model file not found at {model_path}. Please ensure 'model.pkl' is in the 'models' directory.")
-            logger.error(f"Model file not found at {model_path}")
+        # Load the mlflow model
+        try:
+            predictor.model = mlflow.sklearn.load_model(mlflow_model_uri)
+            logger.info(f"MLflow model loaded successfully from {mlflow_model_uri}")
+        except Exception as e:
+            st.error(f"Error loading MLflow model: {str(e)}")
+            logger.error(f"Error loading MLflow model: {str(e)}")
             return None, None
 
         logger.info("Predictor and team stats loaded successfully")

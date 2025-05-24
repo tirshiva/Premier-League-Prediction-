@@ -29,7 +29,7 @@ time.sleep(5) # Adjust sleep time if necessary
 # Start the Streamlit app
 print("Starting frontend application...")
 try:
-    subprocess.run(['streamlit', 'run', 'src/frontend/app.py'], check=True)
+    subprocess.run(['streamlit', 'run', 'src/frontend/app.py', '--server.port', '8502'], check=True)
 except KeyboardInterrupt:
     print("Frontend application stopped by user.")
 finally:
