@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/tirshiva/Documents/mlops%20project/mlruns/0/8151e6c556b6452ea6c0327768cc8449/artifacts
+end_time: 1748033604727
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8151e6c556b6452ea6c0327768cc8449
+run_name: angry-lark-14
+run_uuid: 8151e6c556b6452ea6c0327768cc8449
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748033590818
+status: 3
+tags: []
+user_id: tirshiva

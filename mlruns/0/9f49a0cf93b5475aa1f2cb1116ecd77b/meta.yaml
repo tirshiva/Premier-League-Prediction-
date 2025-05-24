@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/tirshiva/Documents/mlops%20project/mlruns/0/9f49a0cf93b5475aa1f2cb1116ecd77b/artifacts
+end_time: 1748033604894
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9f49a0cf93b5475aa1f2cb1116ecd77b
+run_name: likeable-quail-929
+run_uuid: 9f49a0cf93b5475aa1f2cb1116ecd77b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748033604786
+status: 3
+tags: []
+user_id: tirshiva

@@ -1,0 +1,12 @@
+[theme]
+primaryColor = "#4CAF50"
+backgroundColor = "#1a1a1a"
+secondaryBackgroundColor = "#2d2d2d"
+textColor = "#ffffff"
+
+[server]
+port = 8501
+enableCORS = true
+
+[browser]
+serverAddress = "localhost"
